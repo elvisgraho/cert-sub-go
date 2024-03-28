@@ -17,7 +17,7 @@ go install github.com/elvisgraho/cert-sub-go@latest
 ### Flags
 
 * -r: File with root domains (mandatory), e.g., ```tesla.com```
-* -s: Block size, e.g., ```-s 2000000'```. How many SSL entries to scan for each provider. More entries = further back the data.
+* -s: Block size, e.g., ```-s 2000000```. How many SSL entries to scan for each provider. More entries = further back the data.
 * -wildCard: FRemove all *. from SSL data.
 * -o: Out filename, default is  ```-o cert-sub-go.out```
 * -v: Verbose logging

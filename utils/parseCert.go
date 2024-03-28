@@ -16,9 +16,9 @@ var (
 )
 
 // Checks if a domain is a subdomain of any root domain in the global map
-func isSubdomain(domain string, userSettings *UserSettings) bool {
+func isSubdomain(domain string, userSettings *UserSettings) string {
 	if domain == "" {
-		return false
+		return ""
 	}
 
 	if userSettings.FilterWildCards {
@@ -34,7 +34,7 @@ func isSubdomain(domain string, userSettings *UserSettings) bool {
 	defer mutex.Unlock()
 
 	if seenDomains[domain] {
-		return false
+		return ""
 	}
 
 	parts := strings.Split(domain, ".")
@@ -46,12 +46,12 @@ func isSubdomain(domain string, userSettings *UserSettings) bool {
 				seenDomains[domain] = true
 				// Write the string to the file
 				fmt.Printf("%s\n", domain)
-				return true
+				return domain
 			}
 		}
 	}
 
-	return false
+	return ""
 }
 
 // Prints out a short bit of info about |cert|, found at |index| in the
@@ -63,12 +63,14 @@ func logCertInfo(entry *ct.RawLogEntry, userSettings *UserSettings, domainChan c
 		log.Printf("Process cert at index %d: <unparsed: %v>", entry.Index, err)
 	} else {
 		commonName := parsedEntry.X509Cert.Subject.CommonName
-		if isSubdomain(commonName, userSettings) {
-			domainChan <- commonName
+		foundSub := isSubdomain(commonName, userSettings)
+		if foundSub != "" {
+			domainChan <- foundSub
 		}
 		for _, domain := range parsedEntry.X509Cert.DNSNames {
-			if isSubdomain(domain, userSettings) {
-				domainChan <- domain
+			foundSub = isSubdomain(domain, userSettings)
+			if foundSub != "" {
+				domainChan <- foundSub
 			}
 		}
 	}
@@ -82,12 +84,14 @@ func logPrecertInfo(entry *ct.RawLogEntry, userSettings *UserSettings, domainCha
 		log.Printf("Process precert at index %d: <unparsed: %v>", entry.Index, err)
 	} else {
 		commonName := parsedEntry.Precert.TBSCertificate.Subject.CommonName
-		if isSubdomain(commonName, userSettings) {
-			domainChan <- commonName
+		foundSub := isSubdomain(commonName, userSettings)
+		if foundSub != "" {
+			domainChan <- foundSub
 		}
 		for _, domain := range parsedEntry.Precert.TBSCertificate.DNSNames {
-			if isSubdomain(domain, userSettings) {
-				domainChan <- domain
+			foundSub = isSubdomain(domain, userSettings)
+			if foundSub != "" {
+				domainChan <- foundSub
 			}
 		}
 	}
