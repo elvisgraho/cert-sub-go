@@ -12,6 +12,7 @@ type UserSettings struct {
 	FilterWildCards bool
 	OutFilename     string
 	VerboseLogging  bool
+	FetchInterval   int // Add this line
 }
 
 func UserInput() *UserSettings {
@@ -25,6 +26,7 @@ func UserInput() *UserSettings {
 	flag.BoolVar(&userSettings.FilterWildCards, "wildCard", false, "Remove all *. from SSL data.")
 	flag.StringVar(&userSettings.OutFilename, "o", "cert-sub-go.out", "Output filename, default: cert-sub-go.out")
 	flag.BoolVar(&userSettings.VerboseLogging, "v", false, "Verbose logging.")
+	flag.IntVar(&userSettings.FetchInterval, "f", 5, "Interval in seconds between fetching log entries.") // Add this line
 
 	// Parse flags
 	flag.Parse()
@@ -49,6 +51,7 @@ func PrintUsage() {
 	fmt.Println("  -o        <filename>       : Output filename, default: cert-sub-go.out")
 	fmt.Println("  -wildCard <boolean>        : Remove all *. from SSL data.")
 	fmt.Println("  -v        <boolean>        : Verbose logging.")
+	fmt.Println("  -f        <number>         : Interval in seconds between fetching log entries, default: 5 seconds.") // Add this line
 	fmt.Println("Example:")
 	fmt.Println("  cert-sub-go -r targets.txt")
 }

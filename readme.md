@@ -16,11 +16,19 @@ go install github.com/elvisgraho/cert-sub-go@latest
 
 ### Flags
 
-* -r: File with root domains (mandatory), e.g., ```tesla.com```
-* -s: Block size, e.g., ```-s 2000000```. How many SSL entries to scan for each provider. More entries = further back the data.
-* -wildCard: FRemove all *. from SSL data.
-* -o: Out filename, default is  ```-o cert-sub-go.out```
-* -v: Verbose logging
+cert-sub-go - Search certificate information for more subdomains.
+Usage: cert-sub-go -r targets.txt
+Flags:
+ * -r        <filename>       : File that has all target root domains, ex: tesla.com
+ * -s        <number>         : How many SSL entries to parse for each provider. More entries = further back the data
+ * -o        <filename>       : Output filename, default: cert-sub-go.out
+ * -wildCard <boolean>        : Remove all *. from SSL data.
+ * -v        <boolean>        : Verbose logging.
+ * -f        <number>         : Interval in seconds between fetching log entries, default: 5 seconds.
+Example:
+  cert-sub-go -r targets.txt
+exit status 1
+
 
 ### Examples
 
